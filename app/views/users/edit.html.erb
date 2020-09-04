@@ -1,0 +1,37 @@
+<body>
+	<div class="container">
+		<div class="row">
+
+			<section class="col-xs-12">
+				<!-- New Book投稿フォーム -->
+				<%= form_for (@user) do |f| %>
+
+				<!-- エラー時メッセージ表示 -->
+					<div class="error_display">
+						<% if @user.errors.any? %>
+							<h3><%= @user.errors.count %> errors prohibited this obj from being saved:</h3>
+							<ul>
+								<% @user.errors.full_messages.each do |message| %>
+								<li><%= message %></li>
+								<% end %>
+							</ul>
+						<% end %>
+					</div>
+
+					<p>User info</p>
+
+					<!-- ユーザー編集画面表示 -->
+					<h4>Name</h4>
+						<%= f.text_field :name, class: "name" %>
+					<h4>Image</h4>
+			    		<%= f.attachment_field :profile_image, placeholder: "プロフィール画像", class: "user_image" %>
+					<h4>Introduction</h4>
+						<%= f.text_area :introduction, class: "introduction" %>
+					<div>
+						<%= f.submit 'Update User' %>
+					</div>
+				<% end %>
+			</section>
+
+	</div>
+</body>

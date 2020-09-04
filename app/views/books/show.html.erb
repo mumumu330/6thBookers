@@ -1,0 +1,92 @@
+<body>
+	<div class="container">
+		<div class="row">
+
+			<!-- サクセスメッセージ表示 -->
+			<p>
+				<% if flash[:notice] %>
+					<%= flash[:notice] %>
+				<% end %>
+			</p>
+
+			<section class="col-xs-3">
+				<!-- ユーザー情報と投稿フォームを表示 -->
+				<%= render 'users/list', book: Book.new, user: @user %>
+			</section>
+
+
+			<section class="col-xs-9">
+				<h1>Book detail</h1>
+
+				<!-- 投稿内容を表示 -->
+				<table class="table table-hover table-inverse">
+					<tr>
+						<td>
+							<%= attachment_image_tag @book.user, :profile_image, :fill, 50, 50, fallback: "img/no-image.png", size: "50x50" %>
+						</td>
+						<td><%= @book.title %></td>
+						<td><%= @book.body %></td>
+
+						<%= render 'books/post', book: @book %>
+						<%= render 'books/comment', book: @book %>
+
+						<!-- 編集・削除 条件分岐 -->
+						<% if @book.user.id == current_user.id %>
+							<td>
+								<%= link_to "Edit", edit_book_path, class: "edit_book_#{@book.id} btn btn-sm btn-success" %>
+							</td>
+
+							<td>
+								<%= link_to "Destroy", book_path(@book), method: :delete, "data-confirm" => "本当に消しますか？", class: "destroy_book_#{@book.id} btn btn-sm btn-danger" %>
+							</td>
+						<% end %>
+					</tr>
+				</table>
+
+				<!-- ユーザー詳細画面へのリンク -->
+				
+				<tr>
+				<td>
+				<%= link_to @user.name, user_path(@user.id), class: "user_#{@user.id}" %>
+				</td>
+				</tr>
+
+
+
+				<!-- コメント -->
+				<% @book.post_comments.each do |post_comment| %>
+				<table>
+        <tr>
+				    <td>
+							<%= attachment_image_tag @book.user, :profile_image, :fill, 50, 50, fallback: "img/no-image.png", size: "50x50" %>
+						</td>
+						<td><%= post_comment.comment %></td>
+						<td>
+						<% if post_comment.user == current_user %>
+            <div>
+              <%= link_to "Destroy", book_post_comment_path(post_comment.book, post_comment), method: :delete, class: "btn btn-danger pull-right" %>
+            </div>
+          <% end %>
+						</td>
+				<% end %>
+				</tr>
+				</table>
+
+
+			  			
+				<%= form_for [@book, @post_comment] do |f| %>
+        <div class="row">
+        <div class="col-sm-12">
+        <%= f.text_area :comment, rows:'5', class: "form-control",placeholder: "コメントをここに" %>
+        </div>
+        </div>
+        <%= f.submit "送信", class: "btn btn-lg btn-base-1 mt-20 pull-right" %>
+        <% end %>
+
+
+
+
+			</section>
+		</div>
+	</div>
+</body>

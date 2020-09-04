@@ -1,0 +1,52 @@
+<body>
+	<div class="container">
+		<div class="row">
+
+			<!-- サクセスメッセージ表示 -->
+			<p>
+				<% if flash[:notice] %>
+					<%= flash[:notice] %>
+				<% end %>
+			</p>
+
+			<section class="col-xs-3">
+				<!-- ユーザー情報と投稿フォームを表示 -->
+				<%= render 'users/list', book: @book, user: @user %>
+			</section>
+
+			<section class="col-xs-9">
+				<h1>Books</h1>
+
+				<!-- 投稿一覧を表示 -->
+				<table class="table table-hover table-inverse">
+					<thead>
+						<tr>
+							<th></th>
+							<th>Title</th>
+							<th>Opinion</th>
+						</tr>
+					</thead>
+					<% @books.each do |book| %>
+					<tbody>
+						<tr>
+							<td>
+								<%= link_to user_path(book.user_id) do %>
+								<%= attachment_image_tag book.user, :profile_image, :fill, 50, 50, fallback: "img/no-image.png", size: "50x50" %>
+							</td>
+							<% end %>
+
+							<td><%= link_to book.title, book_path(book.id), class: "book_#{book.id}" %></td>
+							<td><%= book.body %></td>
+
+							<%= render 'books/post', book: book %>
+							<%= render 'books/comment', book: book %>
+
+						</tr>
+					</tbody>
+					<% end %>
+				</table>
+			</section>
+
+		</div>
+	</div>
+</body>
