@@ -37,8 +37,11 @@
 
 							<td><%= link_to book.title, book_path(book.id), class: "book_#{book.id}" %></td>
 							<td><%= book.body %></td>
+							
 
-							<%= render 'books/post', book: book %>
+							<td id="favorite_<%= book.id %>">
+								<%= render 'books/post', book: book %>
+							</td>
 							<%= render 'books/comment', book: book %>
 
 						</tr>
