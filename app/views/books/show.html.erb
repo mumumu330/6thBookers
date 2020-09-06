@@ -27,7 +27,9 @@
 						<td><%= @book.title %></td>
 						<td><%= @book.body %></td>
 
-						<%= render 'books/post', book: @book %>
+						<td id="favorite_<%= @book.id %>">
+								<%= render 'books/post', book: @book %>
+						</td>
 						<%= render 'books/comment', book: @book %>
 
 						<!-- 編集・削除 条件分岐 -->
@@ -54,34 +56,19 @@
 
 
 				<!-- コメント -->
-				<% @book.post_comments.each do |post_comment| %>
-				<table>
-        <tr>
-				    <td>
-							<%= attachment_image_tag @book.user, :profile_image, :fill, 50, 50, fallback: "img/no-image.png", size: "50x50" %>
-						</td>
-						<td><%= post_comment.comment %></td>
-						<td>
-						<% if post_comment.user == current_user %>
-            <div>
-              <%= link_to "Destroy", book_post_comment_path(post_comment.book, post_comment), method: :delete, class: "btn btn-danger pull-right" %>
-            </div>
-          <% end %>
-						</td>
-				<% end %>
-				</tr>
-				</table>
+				<ul>
+				<li id="post_comments">
+            <%= render partial: 'books/post_comment', locals: { book: @book, post_comment: @post_comment } %>
+        </li>
+				</ul>
 
 
 			  			
-				<%= form_for [@book, @post_comment] do |f| %>
-        <div class="row">
-        <div class="col-sm-12">
-        <%= f.text_area :comment, rows:'5', class: "form-control",placeholder: "コメントをここに" %>
-        </div>
-        </div>
-        <%= f.submit "送信", class: "btn btn-lg btn-base-1 mt-20 pull-right" %>
+				<%= form_with(model: [@book, @post_comment], url: book_post_comments_path(@book) ) do |f| %>
+        <%= f.text_area :comment, class: "input-mysize" %>
+        <%= f.submit "送信", class: "btn btn-outline-dark comment-submit float-right" %>
         <% end %>
+
 
 
 
