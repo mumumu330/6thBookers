@@ -10,9 +10,19 @@ class PostCommentsController < ApplicationController
   end
 
 
+  # def destroy
+    # PostComment.find_by(id: params[:id], book_id: params[:book_id]).destroy
+    # redirect_back(fallback_location: root_url)
+  # end
+
   def destroy
-    PostComment.find_by(id: params[:id], book_id: params[:book_id]).destroy
-    redirect_back(fallback_location: root_url)
+    @post_comment = PostComment.find(params[:id])
+    @book = @post_comment.book
+    if @post_comment.user != current_user
+      render "destroy"
+    end
+    @post_comment.destroy
+    render "destroy"
   end
 
   private
